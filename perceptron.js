@@ -86,9 +86,9 @@ function generateDataSet(vectorSpace, size, range,) {
 			trainingSet[i].push(Math.floor(randRange(0,range)));
 		}
 		if(trainingSet[i][0] <= trainingSet[i][1]) {
-			labels.push(1);
-		} else {
 			labels.push(-1);
+		} else {
+			labels.push(1);
 		}
 	}
 	return {labels:labels, data:trainingSet }

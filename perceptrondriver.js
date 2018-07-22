@@ -6,32 +6,43 @@ $(document).ready(function () {
 	var canvas = $('#theCanvas');
 	var ctx = canvas[0].getContext('2d');
 	var width = canvas.width()
-	var height = canvas.height()			
-	var params = {
-			vectorSpace:2,
-			learningRate:0.0001,
-			bias:1,
-			activationFunction:activate,
-			//weights:[Math.random(), Math.random(), Math.random()]
-			weights:[0,0,0]
-		};
+	var height = canvas.height()	
 		
-	var perceptron = new Perceptron(params);
+	var perceptron = null;
 	var trainData = null;
 	var currentDataIndex = 0;
 	var numCorrect = 0;
 	
+	var dataPointSliderValue = 20;
+	
 
-	ctx.fillStyle = '#e0e0eb';
-	ctx.fillRect(0,0,width,height);
+	var aStyle = '#ff6347';
+	var bStyle = '#87ceeb';
+	var canvasParams = {ctx:ctx, width:width, height:height};
+	
 	ctx.translate(0,height);
 	height = -height;
+	refreshCanvas(canvasParams);	
 	
-	ctx.moveTo(0,0);
-	ctx.lineTo(width, height);
-	ctx.stroke();
-	
-	
+	$('#theCanvas').click(function(event) {
+		console.log('canvas clicked');
+		
+		var pos = $('#canvasParent').position();
+		var x = event.pageX - pos.left-14.5;
+		var y =  $(this).height() - (event.pageY-pos.top)
+		if(!(perceptron === null)) {
+			var guess = perceptron.predict([x,y])
+			console.log(`guess: ${guess}`)
+			if(guess == -1) {
+				ctx.fillStyle = aStyle;
+				fillCircle(ctx,x,-y,10);
+			} else if(guess == 1) {
+				ctx.fillStyle = bStyle;
+				fillCircle(ctx,x,-y,10);
+			}
+		}
+		
+	});
 	
 	$('#theCanvas').mousemove(function(event) {
 		var pos = $('#canvasParent').position();
@@ -45,16 +56,16 @@ $(document).ready(function () {
 		var y = 1;
 		var radius = 10;
 		var point;
-		
-		trainData = generateDataSet(2, 50, width-radius);
+		refreshCanvas(canvasParams);	
+		trainData = generateDataSet(2, dataPointSliderValue, width-radius);
 		for(var i=0; i < trainData.data.length; i++) {
 			point = trainData.data[i];
 			if(point[x] <= point[y]) {
-				ctx.strokeStyle = '#ff6347';
+				ctx.fillStyle = aStyle;
 			} else {
-				ctx.strokeStyle = '#87ceeb';
+				ctx.fillStyle = bStyle;
 			}
-			drawCircle(ctx, point[x], -point[y], radius)			
+			fillCircle(ctx, point[x], -point[y], radius)			
 		}
 		
 		$(this).attr('disabled','disabled');
@@ -97,39 +108,116 @@ $(document).ready(function () {
 		currentDataIndex++;
 	})
 	
+	var timer = null;
+	
 	$('#playLearn').click(function() {
-		
-		var timer = setInterval( function() {
-			var accuracy = 0;
-			var radius = 6;
-			
-			for(var i = 0; i < trainData.data.length; i++) {
-				var guess = perceptron.predict(trainData.data[i]);
-				if(guess == trainData.labels[i]) {
-					accuracy++;
-					ctx.fillStyle = '#00ff00';
-					numCorrect++;
-				} else {
-					ctx.fillStyle = '#ff0000';
+		console.log(perceptron);
+		if(!(perceptron === null)) {
+			timer = setInterval( function() {
+				var accuracy = 0;
+				var radius = 6;
+				
+				for(var i = 0; i < trainData.data.length; i++) {
+					var guess = perceptron.predict(trainData.data[i]);
+					if(guess == trainData.labels[i]) {
+						accuracy++;
+						ctx.fillStyle = '#00ff00';
+						numCorrect++;
+					} else {
+						ctx.fillStyle = '#ff0000';
+					}
+					var x = trainData.data[i][0];
+					var y = trainData.data[i][1];
+					fillCircle(ctx,x,-y,radius);
 				}
-				var x = trainData.data[i][0];
-				var y = trainData.data[i][1];
-				fillCircle(ctx,x,-y,radius);
-			}
-			accuracy = (accuracy / trainData.data.length) * 100;
-			$('#mousecoords').html(`<i>Accurcy: ${accuracy}%</i>`);
-			if(accuracy >= 100) {
-				console.log('met accuacyt');
-				clearInterval(timer);
-			}
-			
-			for(var i=0; i < 10001; i++) {
-				perceptron.train(trainData.labels, trainData.data);
-			}
-		}, 100);
+				accuracy = (accuracy / trainData.data.length) * 100;
+				$('#mousecoords').html(`<i>Accurcy: ${accuracy}%</i>`);
+				if(accuracy >= 100) {
+					console.log('met accuacyt');
+					clearInterval(timer);
+					$('#genData').removeAttr('disabled');
+					$('#playLearn').attr('disabled','disabled');
+					$('#stepLearn').attr('disabled','disabled');
+				}
+				
+				for(var i=0; i < 10001; i++) {
+					perceptron.train(trainData.labels, trainData.data);
+				}
+			}, 100);
+		}
+		
+	});
+
+	
+	var xWeightValue = 0;
+	var yWeightValue = 0;
+	var biasWeightValue = 0;
+	var learningRateValue = 0.001;
+	
+	
+	var dpSlider = $('#dataPoints')[0];
+	dpSlider.oninput =  function() {
+		$('#dataPointValue')[0].innerHTML = this.value;
+		dataPointSliderValue = parseFloat(this.value);
+	}
+	var xWeight = $('#xWeight')[0];
+	xWeight.oninput =  function() {
+		$('#xWeightValue')[0].innerHTML = this.value;
+		xWeightValue = parseFloat(this.value);
+	}
+	var yWeight = $('#yWeight')[0];
+	yWeight.oninput =  function() {
+		$('#yWeightValue')[0].innerHTML = this.value;
+		yWeightValue = parseFloat(this.value);
+	}
+	var biasWeight = $('#biasWeight')[0];
+	biasWeight.oninput =  function() {
+		$('#biasWeightValue')[0].innerHTML = this.value;
+		biasWeightValue = parseFloat(this.value);
+	}
+	
+	var learningRate = $('#learningRate')[0];
+	learningRate.oninput =  function() {
+		$('#learningRateWeightValue')[0].innerHTML = this.value;
+		learningRateValue = parseFloat(this.value);
+	}
+	
+	
+	
+	$('#reset').click(function() {
+		refreshCanvas(canvasParams);
+		clearInterval(timer);
+		perceptron = null;
+		trainData = null;
+		$('#generatePerceptron').removeAttr('disabled');
+		$('#genData').attr('disabled','disabled');
+		$('#playLearn').attr('disabled','disabled');
+		$('#stepLearn').attr('disabled','disabled');
+	});
+	
+	$('#clearCanvas').click(function() {
+		refreshCanvas(canvasParams);
 		
 	});
 	
+	
+	
+	$('#generatePerceptron').click(function() {
+		perceptron = new Perceptron ({
+			vectorSpace:2,
+			learningRate:$('#learningRate')[0].value,
+			bias:1,
+			activationFunction:activate,
+			weights:[xWeightValue,
+					yWeightValue,
+					biasWeightValue]
+		});
+		$(this).attr('disabled','disabled');
+		$('#genData').removeAttr('disabled');
+		
+		console.log(perceptron);
+		
+	});
 });
 
 function drawCircle(context,x,y,radius) {
@@ -144,4 +232,16 @@ function fillCircle(context, x, y, radius) {
 	context.beginPath();
 	context.arc(x, y, radius, 0, 2*Math.PI)
 	context.fill();
+}
+
+function refreshCanvas(params) {
+	var style = params.ctx.fillStyle;
+
+	params.ctx.fillStyle = '#e0e0eb';
+	params.ctx.fillRect(0,0,params.width,-params.height);
+    params.ctx.strokeStyle = '#000000';
+ 	params.ctx.moveTo(0,0);
+	params.ctx.lineTo(params.width, -params.height);
+	params.ctx.stroke();
+	params.ctx.fillStyle = style;
 }

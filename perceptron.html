@@ -59,21 +59,44 @@
 				<canvas id="theCanvas" width="300" height="300">
 					canvas element not supported by this browser
 				</canvas>
+				<button id="reset" class="btn btn-default">reset</button>
+				<button id="clearCanvas" class="btn btn-default">clear canvas</button>
 			</div>
 			<div class="col-sm-8" id="controls">
 				<div class="container">
-				   <div class="row">
+				  <div class="row">
 					<div class="slide-container" >
-						<input class="slider" id="dataPoints" type="range" min="1" max="100" step="1" value="20"/>
+						<p><i>X-Weight</i></p>
+						<input class="slider" id="xWeight" type="range" min="0" max="1" step=".001" value="0"/>
+						<p><i>Value: <span id="xWeightValue">0</span></i></p>
+						<p><i>Y-Weight</i></p>
+						<input class="slider" id="yWeight" type="range" min="0" max="1" step=".001" value="0"/>
+						<p><i>Value: <span id="yWeightValue">0</span></i></p>
+						<p><i>Bias-Weight</i></p>
+						<input class="slider" id="biasWeight" type="range" min="0" max="1" step=".001" value="0"/>
+						<p><i>Value: <span id="biasWeightValue">0</span></i></p>
+						<p><i>Learning Rate</i></p>
+						<input class="slider" id="learningRate" type="range" min="0" max="1" step=".001" value="0.001"/>
+						<p><i>Value: <span id="learningRateWeightValue">.001</span></i></p>
 					</div>
 					<div syle="padding: 10px; float:left;">
-						<button class="btn btn-default" id="genData" >generate data</button>
+						<button class="btn btn-default" id="generatePerceptron" >Initialize Perceptron</button>
+					</div>
+				  </div>
+				   <div class="row">
+					<div class="slide-container" >
+						<p><i>Data points</i></p>
+						<input class="slider" id="dataPoints" type="range" min="1" max="100" step="1" value="20"/>
+						<p><i>Value: <span id="dataPointValue">20</span></i></p>
+					</div>
+					<div syle="padding: 10px; float:left;">
+						<button class="btn btn-default" id="genData" disabled="disabled" >generate data</button>
 					</div>
 				  </div>
 				</div>
-				<button class="btn btn-default"id="stepLearn" disabled="disabled">step learning</button><br>
-				<button class="btn btn-default"id="playLearn" disabled="disabled">play learning</button><br>
-				<p id="mousecoords">MouseHEre</p>
+				<button class="btn btn-default"id="stepLearn" disabled="disabled">stepwise train</button><br>
+				<button class="btn btn-default"id="playLearn" disabled="disabled">train perceptron</button><br>
+				<p id="mousecoords"></p>
 			</div>
 	
 		  </div>
