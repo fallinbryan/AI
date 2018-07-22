@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+      <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	  <script src="perceptron.js"></script>
+	  <script src="perceptrondriver.js"></script>
+	</head>
+	<body>
+		<div class="jumbotron" style="text-align:center">
+		  <h1>Exploring the <a href="https://en.wikipedia.org/wiki/Perceptron" target="_blank">perceptron</a></h1>
+            
+			  <img src="https://www.w3.org/html/logo/badge/html5-badge-h-solo.png" width="63" height="64" alt="HTML5 Powered" title="HTML5 Powered">
+             
+             <img src="jquery-filled.png" width="63" height="64" alt="JQuery Powered" title="JQuery Powered">
+             <img src="Boostrap_logo.svg" width="63" height="64" alt="Boostrap Powered" title="Boostrap Powered">
+             <img src="JAVAScript-collector.png" width="63" height="64" alt="JS Powered" title="JS Powered">
+		</div>
+		<div class="container">
+		  <div class="row">
+				<div class="col-sm-4" id="canvasParent"style="height:310px">
+				<canvas id="theCanvas" width="300" height="300">
+					canvas element not supported by this browser
+				</canvas>
+			</div>
+			<div class="col-sm-8" id="controls">
+				<button id="genData">generate data</button><br>
+				<button id="stepLearn" disabled="disabled">step learning</button><br>
+				<button id="playLearn" disabled="disabled">play learning</button><br>
+				<p id="mousecoords">MouseHEre</p>
+			</div>
+	
+		  </div>
+		</div>
+	</body>
+	<footer>
+	</footer>
+</html>
