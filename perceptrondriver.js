@@ -23,9 +23,10 @@ $(document).ready(function () {
 	ctx.translate(0,height);
 	height = -height;
 	refreshCanvas(canvasParams);	
-	
-	$('#theCanvas').click(function(event) {
-		console.log('canvas clicked');
+
+  $('#theCanvas').on({'touchstart': function(event){
+   
+		//console.log('canvas clicked');
 		
 		var pos = $('#canvasParent').position();
 		var x = event.pageX - pos.left-14.5;
@@ -33,6 +34,25 @@ $(document).ready(function () {
 		if(!(perceptron === null)) {
 			var guess = perceptron.predict([x,y])
 			console.log(`guess: ${guess}`)
+			if(guess == -1) {
+				ctx.fillStyle = aStyle;
+				fillCircle(ctx,x,-y,10);
+			} else if(guess == 1) {
+				ctx.fillStyle = bStyle;
+				fillCircle(ctx,x,-y,10);
+			}
+		}
+  }});
+	
+	$('#theCanvas').click(function(event) {
+		//console.log('canvas clicked');
+		
+		var pos = $('#canvasParent').position();
+		var x = event.pageX - pos.left-14.5;
+		var y =  $(this).height() - (event.pageY-pos.top)
+		if(!(perceptron === null)) {
+			var guess = perceptron.predict([x,y])
+			//console.log(`guess: ${guess}`)
 			if(guess == -1) {
 				ctx.fillStyle = aStyle;
 				fillCircle(ctx,x,-y,10);
@@ -100,7 +120,7 @@ $(document).ready(function () {
 			ctx.fillStyle = '#ff0000';
 		}
 		fillCircle(ctx,x,-y,radius);
-		console.log(trainData.data[currentDataIndex]);
+		//console.log(trainData.data[currentDataIndex]);
 		perceptron.stepTrain(trainData.labels[currentDataIndex],
 						 trainData.data[currentDataIndex]);
 						 
@@ -111,7 +131,7 @@ $(document).ready(function () {
 	var timer = null;
 	
 	$('#playLearn').click(function() {
-		console.log(perceptron);
+		//console.log(perceptron);
 		if(!(perceptron === null)) {
 			timer = setInterval( function() {
 				var accuracy = 0;
@@ -131,9 +151,9 @@ $(document).ready(function () {
 					fillCircle(ctx,x,-y,radius);
 				}
 				accuracy = (accuracy / trainData.data.length) * 100;
-				$('#mousecoords').html(`<i>Accurcy: ${accuracy}%</i>`);
+				$('#mousecoords').html(`<i>Accuracy: ${accuracy}%</i>`);
 				if(accuracy >= 100) {
-					console.log('met accuacyt');
+					//console.log('met accuacyt');
 					clearInterval(timer);
 					$('#genData').removeAttr('disabled');
 					$('#playLearn').attr('disabled','disabled');
@@ -215,7 +235,7 @@ $(document).ready(function () {
 		$(this).attr('disabled','disabled');
 		$('#genData').removeAttr('disabled');
 		
-		console.log(perceptron);
+		//console.log(perceptron);
 		
 	});
 });
