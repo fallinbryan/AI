@@ -45,27 +45,47 @@
 			background: #4caf50;
 			cursor: pointer;
 		}
+		
+		.page_top {
+			text-align:center;  
+			background-image: url('perceptron_bg.jpg');
+			background-repeat: no-repeat; 
+			background-position: right;
+			background-size: 100%; 
+			background-color: #c5c1be;
+			
+		}
 	  </style>
 	</head>
 	<body>
-		<div class="jumbotron" style="text-align:center">
+		<div class="jumbotron page_top">
 		  <h1>Exploring the <a href="https://en.wikipedia.org/wiki/Perceptron" target="_blank">perceptron</a></h1>
             
 
 		</div>
-		<div class="container">
+		<div class="container-fluid">
+		
+		
 		  <div class="row">
-				<div class="col-sm-4" id="canvasParent"style="height:310px">
+			<div class="col-sm-4" id="canvasParent" width="320" style="width: 340px;">
+				
 				<canvas id="theCanvas" width="300" height="300">
 					canvas element not supported by this browser
 				</canvas>
+				<div class="spacer"> 
 				<button id="reset" class="btn btn-default">reset</button>
 				<button id="clearCanvas" class="btn btn-default">clear canvas</button>
+				<button class="btn btn-default"id="playLearn" disabled="disabled">train perceptron</button>
+				<p id="mousecoords"></p> </div>
 			</div>
-			<div class="col-sm-8" id="controls">
-				<div class="container">
+			
+			<div class="col-sm-4" id="controls">
+				<div class="container">			
 				  <div class="row">
 					<div class="slide-container" >
+					<div syle="padding: 10px; float:left;">
+						<button class="btn btn-default" id="generatePerceptron" >Initialize Perceptron</button>
+					</div>
 						<p><i>X-Weight</i></p>
 						<input class="slider" id="xWeight" type="range" min="0" max="1" step=".001" value="0"/>
 						<p><i>Value: <span id="xWeightValue">0</span></i></p>
@@ -79,27 +99,56 @@
 						<input class="slider" id="learningRate" type="range" min="0" max="1" step=".001" value="0.001"/>
 						<p><i>Value: <span id="learningRateWeightValue">.001</span></i></p>
 					</div>
-					<div syle="padding: 10px; float:left;">
-						<button class="btn btn-default" id="generatePerceptron" >Initialize Perceptron</button>
-					</div>
+					
 				  </div>
-				   <div class="row">
+				  
+				  
+				  
+				  
+				</div>
+				<!--<button class="btn btn-default"id="stepLearn" disabled="disabled">stepwise train</button> -->
+				
+				
+			</div>
+			
+			<div class="col-sm-4">
+			 <div class="row">
+				   <div syle="padding: 10px; float:left;">
+						<button class="btn btn-default" id="genData" disabled="disabled" >generate data</button>
+					</div>
 					<div class="slide-container" >
 						<p><i>Data points</i></p>
 						<input class="slider" id="dataPoints" type="range" min="1" max="100" step="1" value="20"/>
 						<p><i>Value: <span id="dataPointValue">20</span></i></p>
 					</div>
-					<div syle="padding: 10px; float:left;">
-						<button class="btn btn-default" id="genData" disabled="disabled" >generate data</button>
-					</div>
+					
 				  </div>
-				</div>
-				<button class="btn btn-default"id="stepLearn" disabled="disabled">stepwise train</button><br>
-				<button class="btn btn-default"id="playLearn" disabled="disabled">train perceptron</button><br>
-				<p id="mousecoords"></p>
 			</div>
-	
 		  </div>
+		  
+		  <div class="row" style="padding:20px;">
+		  <p>The perceptron is a basic building block of the nerual network.  The perceptron calculates a weighted sum of its inputs then sends that result
+			through an activation fucntion that outputs a binary result.</p>
+		   <p>In this example, the inputs are the x,y corrdinates of the circles that appear in the canvas when you click generate data. </p>
+		   <p>We train our perceptron with a supervised learning model. When you click generate data, a collection of random
+			(x,y) cooridinates are generated and an associated label is calculated: -1 if x &lt; y and 1 if x > y.</p><p>  When you click train the following steps occur:</p>
+			<ul> 
+			<li> weighted_sum = x*X-Weight + y*Y-weight </li>
+			<li> activation = sin(weighted_sum) </li>
+			<li> if activation &lt;= 0, the assertion is -1, otherwise the assertion is 1 </li>
+			<li> compare the assertion against the associated label </li>
+			<li> if the assertion is correct, do nothing </li>
+			<li> otherwise, calculate the error and adjust all the weights </li>
+			<li> error = label - assertion </li>
+			<li> new X-Weight = X-Weight + error * x * Learning Rate</li>
+			<li> new Y-Weight = Y-Weight + error * y * Learning Rate</li>
+			</ul>
+			
+			<p> The training animation visualizes this process.  The data point is colored red if incorrect or green if it is correct.  The simulation will repeat the above steps while keeping track of its accuracy until it is 100% accurate. </p>
+			<p> Try clicking on the canvas before and after training the perceptron.  The perceptron will make an assertion based on the (x,y) location of where you clicked, and draw circle with a color corresponding to the assertion.  If you notice, before training the model,  the assertions are mostly wrong.  After training, the correct color will be drawn <i>most</i> of the time. </p>
+			<p>Feel free to open up your browser's developer mode and check out the code. The main perceptron constructor is in the perceptron.js file.  </p>
+		  </div>
+		  
 		</div>
 	</body>
 	<footer>
