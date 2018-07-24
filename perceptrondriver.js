@@ -169,9 +169,9 @@ $(document).ready(function () {
 	});
 
 	
-	var xWeightValue = 0;
-	var yWeightValue = 0;
-	var biasWeightValue = 0;
+	var xWeightValue = 0.01;
+	var yWeightValue = 0.01;
+	var biasWeightValue = 0.01;
 	var learningRateValue = 0.001;
 	
 	
