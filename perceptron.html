@@ -134,7 +134,7 @@
 			(x,y) cooridinates are generated and an associated label is calculated: -1 if x &lt; y and 1 if x > y.</p><p>  When you click train the following steps occur:</p>
 			<ul> 
 			<li> weighted_sum = x*X-Weight + y*Y-weight </li>
-			<li> activation = sin(weighted_sum) </li>
+			<li> activation = the sign of the weighted_sum </li>
 			<li> if activation &lt;= 0, the assertion is -1, otherwise the assertion is 1 </li>
 			<li> compare the assertion against the associated label </li>
 			<li> if the assertion is correct, do nothing </li>

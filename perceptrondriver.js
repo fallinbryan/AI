@@ -150,6 +150,8 @@ $(document).ready(function () {
 					var y = trainData.data[i][1];
 					fillCircle(ctx,x,-y,radius);
 				}
+        
+        //drawLine(ctx ,0 ,width, perceptron );
 				accuracy = (accuracy / trainData.data.length) * 100;
 				$('#mousecoords').html(`<i>Accuracy: ${accuracy}%</i>`);
 				if(accuracy >= 100) {
@@ -161,7 +163,9 @@ $(document).ready(function () {
 				}
 				
 				for(var i=0; i < 10001; i++) {
-					perceptron.train(trainData.labels, trainData.data);
+				  if(perceptron.train(trainData.labels, trainData.data) ==1) {
+            break;
+          }
 				}
 			}, 100);
 		}
@@ -241,27 +245,63 @@ $(document).ready(function () {
 });
 
 function drawCircle(context,x,y,radius) {
-	context.beginPath();
+  context.save();
 	context.beginPath();
 	context.arc(x, y, radius, 0, 2*Math.PI)
-	context.stroke();
+	context.closePath();
+  context.stroke();
+  context.restore();
 }
 
-function fillCircle(context, x, y, radius) {
-	context.beginPath();
+function fillCircle(context, x, y, radius) {i
+  context.save();
 	context.beginPath();
 	context.arc(x, y, radius, 0, 2*Math.PI)
-	context.fill();
+	context.closePath();
+  context.fill();
+  context.restore();
 }
 
 function refreshCanvas(params) {
 	var style = params.ctx.fillStyle;
-
+  params.ctx.stroke();
+  params.ctx.clearRect(0,0,params.width, -params.height);
 	params.ctx.fillStyle = '#e0e0eb';
 	params.ctx.fillRect(0,0,params.width,-params.height);
-    params.ctx.strokeStyle = '#000000';
+  params.ctx.strokeStyle = '#000000';
  	params.ctx.moveTo(0,0);
 	params.ctx.lineTo(params.width, -params.height);
 	params.ctx.stroke();
 	params.ctx.fillStyle = style;
 }
+
+function drawLine(context,x1 ,x2 ,percep ) {
+  context.moveTo(x1, -getLineFrom(x1, percep));
+  context.lineTo(x2, -getLineFrom(x2, percep));
+  context.stroke();
+}
+
+function getLineFrom(x, p) {
+  var w1 =  p.weights[0];
+  var w2 =  p.weights[1];
+  var w3 =  p.weights[2];
+  var y = -((x*w1 + w3)/w2);
+  
+  return y;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

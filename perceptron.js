@@ -68,7 +68,7 @@ function Perceptron(params) {
 }
 
 function activate(sum) {
-	return Math.sign(Math.sin(sum));
+	return Math.sign(sum);
 }
 
 var weights = [];
