@@ -162,11 +162,7 @@ $(document).ready(function () {
 					$('#stepLearn').attr('disabled','disabled');
 				}
 				
-				for(var i=0; i < 10001; i++) {
-				  if(perceptron.train(trainData.labels, trainData.data) ==1) {
-            break;
-          }
-				}
+				perceptron.train(trainData.labels, trainData.data);
 			}, 100);
 		}
 		
