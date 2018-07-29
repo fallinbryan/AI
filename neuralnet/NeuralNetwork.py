@@ -1,6 +1,6 @@
 import numpy as np
 import random
-
+import json
 
 class NeuralNetwork:
     '''
@@ -90,11 +90,41 @@ class NeuralNetwork:
             output = self.outputs.pop()
 
     def dump_network(self):
+        _string = ''
         for i, matrix in enumerate(self.weights):
-            print('Weight Matrix[{}]\n{}'.format(i, matrix))
-            print('Bias[{}]\n{}'.format(i, self.bias[i]))
-            print('Node[{}]\n{}'.format(i, self.outputs[i]))
-
+            _string += 'Weight Matrix[{}]:\n{}\n'.format(i, matrix)
+        for i, bias in enumerate(self.bias):    
+            _string += 'Bias[{}]:\n{}\n'.format(i,bias) 
+        for i, output in enumerate(self.outputs):
+            _string += 'Layer[{}]:\n{}\n'.format(i, output)
+        return _string
+    
+    def toJSON(self):
+        try:
+            weights = [[list(w) for w in matrix] for matrix in self.weights ]
+            json.dumps(weights)
+        except:
+            print('fail on weights',type(weights))
+            print(weights)
+            return None
+        try:    
+            biases = [[list(b) for b in matrix] for matrix in self.bias]
+            json.dumps(biases)
+        except:
+            print('fail on biases',type(biases))
+            return None
+        try:
+            layers = [[list(l) for l in matrix] for matrix in self.outputs]
+            json.dumps(biases)
+        except:
+            print('fail on layers',type(layers))
+            return None
+            
+        js_obj = {'weights':weights,'biases':biases,'layers':layers} 
+        return json.dumps(js_obj)
+        
+    def __str__(self):
+        return self.dump_network()
 
 if __name__== '__main__':
 
