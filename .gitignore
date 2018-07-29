@@ -1,1 +1,2 @@
-neuralnet/.ipnb_checkpoints
+neuralnet/.ipynb_checkpoints/
+__pycache__/
