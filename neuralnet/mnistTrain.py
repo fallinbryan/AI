@@ -1,6 +1,8 @@
+#!/usr/bin/env python3
+
+
 from NeuralNetwork import NeuralNetwork as NN
 import json
-import threading
 import random
 import MNIST
 import numpy as np
@@ -8,7 +10,7 @@ import numpy as np
 normalize = np.vectorize(lambda x: np.float(x/255.0))
 
 nn = NN(28*28,[32,16],10)
-nn.learingRate = .1
+nn.learingRate = 2.1
 answerkey = [0,1,2,3,4,5,6,7,8,9]
 train_images =  MNIST.get_images('mnist/train-images-idx3-ubyte')
 test_images  =  MNIST.get_images('mnist/t10k-images-idx3-ubyte')
@@ -42,7 +44,7 @@ def train():
     for data in train_data:
         nn.train(normalize(data['input']),data['target'])
         counter += 1
-        print('{0:.2%} complete'.format(counter/total),end='\r')
+#        print('{0:.2%} complete'.format(counter/total),end='\r')
     nn.predict(train_data[0]['input'])
         
 
@@ -55,22 +57,22 @@ def test():
         if data['target'].index(1) == prediction:
             num_correct += 1
         counter += 1;
-        print('{0:.2%} completed     '.format(counter/total),end='\r')
+#        print('{0:.2%} completed     '.format(counter/total),end='\r')
     score = num_correct / total
-    print('{} out of {} correct'.format(num_correct,total))
+#    print('{} out of {} correct'.format(num_correct,total))
     return score
 
 accuracies = []
 
 counter = 0
 accuracy = 0.0
-while accuracy < .89:
+while accuracy < 0.89:
 #while counter < 1:
-    print('Testing')
+    #print('Testing')
     accuracy = test()
     print('accuracy:{0:.2%}'.format(accuracy))
     accuracies.append(accuracy)
-    print('Training')
+    #print('Training')
     train()
     counter += 1
     print('\nEpoch: {} Complete'.format(counter))
@@ -79,5 +81,5 @@ print(accuracies)
 
 with open ('mnist_weights.json','w') as jfile:
     jfile.write(nn.toJSON())
-
+print('Training complete, neuralnet stores as json')
 

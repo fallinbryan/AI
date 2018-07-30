@@ -1,3 +1,5 @@
+neuralnet/*.log
+neuralnet/thisip.txt
 neuralnet/.ipynb_checkpoints/
 __pycache__/
 neuralnet/mnist
