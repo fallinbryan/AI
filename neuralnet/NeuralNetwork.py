@@ -21,16 +21,16 @@ class NeuralNetwork:
         self.inputLayer = np.array([[0 for _ in range(input_dimension)]], dtype=float).transpose()
         prev_dimension = input_dimension
         for node in hidden_layer_nodes:
-            self.bias.append(np.array([[random.random() for _ in range(node)]], dtype=float).transpose())
+            self.bias.append(np.array([[0 for _ in range(node)]], dtype=float).transpose())
             self.weights.append(
-                np.array([random.random() for _ in range(node * prev_dimension)],
+                np.array([0 for _ in range(node * prev_dimension)],
                          dtype=float).reshape(node, prev_dimension)
             )
             prev_dimension = node
 
-        self.bias.append(np.array([[random.random() for _ in range(output_dimension)]], dtype=float).transpose())
+        self.bias.append(np.array([[0 for _ in range(output_dimension)]], dtype=float).transpose())
         self.weights.append(np.array(
-            [random.random() for _ in range(prev_dimension * output_dimension)],
+            [0 for _ in range(prev_dimension * output_dimension)],
             dtype=float).reshape(output_dimension, prev_dimension))
 
     '''
@@ -40,7 +40,7 @@ class NeuralNetwork:
     def predict(self, input_arr):
         output = None
         self.outputs.clear()
-        self.inputLayer = np.array([input_arr], dtype=float).transpose()
+        self.inputLayer = np.array([input_arr], dtype=float).reshape(self.inputDimension,1)
         activate = np.vectorize(self.activate)
         current_input = np.copy(self.inputLayer)
         for i, weight_matrix in enumerate(self.weights):
@@ -69,7 +69,7 @@ class NeuralNetwork:
 
     def train(self, input_arr, target):
         # print(input_arr)
-        target = np.array([target], dtype=float).transpose()
+        target = np.array([target], dtype=float).reshape(self.outputDimension,1)
         self.predict(input_arr)
         sigma_ddx = np.vectorize(NeuralNetwork.dactivate)
         output = self.outputs.pop()
