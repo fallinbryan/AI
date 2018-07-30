@@ -63,6 +63,7 @@ def test():
 accuracies = []
 
 counter = 0
+accuracy = 0.0
 while accuracy < .89:
 #while counter < 1:
     print('Testing')
