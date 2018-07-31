@@ -9,8 +9,8 @@ import numpy as np
 
 normalize = np.vectorize(lambda x: np.float(x/255.0))
 
-nn = NN(28*28,[32,16],10)
-nn.learingRate = 2.1
+nn = NN(28*28,[64,32,16],10)
+nn.learingRate = 10
 answerkey = [0,1,2,3,4,5,6,7,8,9]
 train_images =  MNIST.get_images('mnist/train-images-idx3-ubyte')
 test_images  =  MNIST.get_images('mnist/t10k-images-idx3-ubyte')
