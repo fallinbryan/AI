@@ -3,3 +3,7 @@ neuralnet/thisip.txt
 neuralnet/.ipynb_checkpoints/
 __pycache__/
 neuralnet/mnist
+neuralnet/*.json
+neuralnet/*.out
+neuralnet/*.ipnb
+*.swp
