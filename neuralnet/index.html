@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+      <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	  <script src="math.min.js" type="text/javascript"></script>
+	  <script src="NeuralNetwork.js"></script>
+
+
+
+	</head>
+	<body>
+    <div class="jumbotron" style="text-align:center">
+      <h1>Digit Classification</h1>
+      <p>With a neural network trained on the mnist digits data setf </p>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+          <div>
+            <canvas id="inputCanvas" width="280" height="280">
+  					      canvas element not supported by this browser
+  				  </canvas>
+          </div>
+        </div>
+        <div class="col-sm-6" id="controls">
+          <button id="clearCanvas" class="btn btn-default">Clear Drawing</button>
+          <button id="categorize" class="btn btn-default">Categorize Drawing</button>
+          <h1 id="result"></h1>
+        </div>
+      </div>
+    </div>
+  </body>
+  <footer></footer>
+</html>

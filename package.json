@@ -1,0 +1,26 @@
+{
+  "name": "ai",
+  "version": "1.0.0",
+  "description": "exploring the concepts of AI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fallinbryan/AI.git"
+  },
+  "keywords": [
+    "ai"
+  ],
+  "author": "Bryan Fallin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fallinbryan/AI/issues"
+  },
+  "homepage": "https://github.com/fallinbryan/AI#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
