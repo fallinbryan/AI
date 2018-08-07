@@ -3,6 +3,7 @@
 #include <vector>
 #include <utility>
 #include <sstream>
+#include <math.h>
 #include "NeuralNetwork.h"
 
 
@@ -13,6 +14,8 @@ NeuralNetwork::NeuralNetwork(ushort inDim, std::vector<ushort>  layers, ushort o
   this->weights = new Eigen::MatrixXd[numLayers];
   this->outputs = new Eigen::VectorXd[numLayers];
   this->biases = new Eigen::VectorXd[numLayers];
+  this->ffSentry = 0;
+  this->bpSentry = 0;
   ushort prevDim = inDim;
   std::pair<ushort,ushort>* LDim = new std::pair<ushort,ushort>();
   LDim->second = inDim;
@@ -29,7 +32,7 @@ NeuralNetwork::NeuralNetwork(ushort inDim, std::vector<ushort>  layers, ushort o
   layerDims.push_back(LDim);
   weights[numLayers-1] = Eigen::MatrixXd::Random(LDim->first,LDim->second);
   biases[numLayers-1] = Eigen::VectorXd::Random(LDim->first);
-  outputs[numLayers-1] = Eigen::VectorXd::Random(LDim->first);
+  outputs[numLayers-1] = Eigen::VectorXd::Zero(LDim->first);
 
 }
 
@@ -50,17 +53,27 @@ NeuralNetwork::NeuralNetwork(std::string json) {
   
 }
 
-Eigen::VectorXd NeuralNetwork::predict() {
-  Eigen::VectorXd v(outputDim);
-  return v;
+Eigen::VectorXd NeuralNetwork::predict(Eigen::VectorXd input) {
+  Eigen::VectorXd prevInput = input;
+  for(ffSentry = 0; ffSentry < numLayers; ffSentry++) {
+          outputs[ffSentry] = weights[ffSentry]*prevInput + biases[ffSentry];
+          //outputs[ffSentry] = outputs[ffSentry].unaryExpr( [](double x) { return (  1/(1+exp(-x)) ); } );
+          outputs[ffSentry] = outputs[ffSentry].unaryExpr( [](double x) { return (activate(x)); } );
+          prevInput = outputs[ffSentry];
+  }
+  
+  return outputs[numLayers-1];
 }
 
 double NeuralNetwork::activate(double x) {
-  return 0.0;
+    x = -x;
+    return 1/(1+exp(x));
 }
 
 double NeuralNetwork::dactivate(double x) {
-  return 0.0;
+    x = -x;
+    double z = 1/(1+exp(x));
+    return z*(1-z);
 }
 
 void NeuralNetwork::train() {

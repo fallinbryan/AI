@@ -16,7 +16,9 @@ private:
   double leargningRate;
   ushort inputDim;
   ushort outputDim;
-  ushort numLayers; 
+  ushort numLayers;
+  ushort ffSentry;
+  ushort bpSentry;
   std::vector<std::pair<ushort,ushort>*> layerDims; // [[w,h],[w,h],[w,h]].... 2d array defining layer dimensions
   Eigen::MatrixXd* weights;
   Eigen::VectorXd* outputs;
@@ -26,7 +28,7 @@ public:
   NeuralNetwork(ushort inDim, std::vector<ushort> layers, ushort outDim, double learningRate);
   NeuralNetwork(std::string json);
   ~NeuralNetwork();
-  Eigen::VectorXd predict();
+  Eigen::VectorXd predict(Eigen::VectorXd input);
   static double activate(double x);
   static double dactivate(double x);
   void train();

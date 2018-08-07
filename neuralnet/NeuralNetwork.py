@@ -18,19 +18,19 @@ class NeuralNetwork:
         self.inputDimension = input_dimension
         self.outputDimension = output_dimension
 
-        self.inputLayer = np.array([[0 for _ in range(input_dimension)]], dtype=float).transpose()
+        self.inputLayer = np.array([[random.random() for _ in range(input_dimension)]], dtype=float).transpose()
         prev_dimension = input_dimension
         for node in hidden_layer_nodes:
-            self.bias.append(np.array([[0 for _ in range(node)]], dtype=float).transpose())
+            self.bias.append(np.array([[random.random() for _ in range(node)]], dtype=float).transpose())
             self.weights.append(
-                np.array([0 for _ in range(node * prev_dimension)],
+                np.array([random.random() for _ in range(node * prev_dimension)],
                          dtype=float).reshape(node, prev_dimension)
             )
             prev_dimension = node
 
-        self.bias.append(np.array([[0 for _ in range(output_dimension)]], dtype=float).transpose())
+        self.bias.append(np.array([[random.random() for _ in range(output_dimension)]], dtype=float).transpose())
         self.weights.append(np.array(
-            [0 for _ in range(prev_dimension * output_dimension)],
+            [random.random() for _ in range(prev_dimension * output_dimension)],
             dtype=float).reshape(output_dimension, prev_dimension))
 
     '''
@@ -48,10 +48,18 @@ class NeuralNetwork:
             # self.zetas.append(zeta)
             output = activate(zeta)
             self.outputs.append(output)
-            current_input = output
+            current_input = output      
+        return NeuralNetwork.softmax(output)
 
-        return output
-
+    @staticmethod
+    def d_softmax(x):
+        s = x.reshape(-1,1)
+        return np.diagflat(s) - np.dot(s, s.T)
+    
+    @staticmethod
+    def softmax(x):
+        z = np.exp(x - np.max(x))
+        return z / x.sum()
     @staticmethod
     def activate(x):
         return 1 / (1 + np.exp(-x))
@@ -70,11 +78,21 @@ class NeuralNetwork:
     def train(self, input_arr, target):
         # print(input_arr)
         target = np.array([target], dtype=float).reshape(self.outputDimension,1)
-        self.predict(input_arr)
+        smaxed_output = self.predict(input_arr)
         sigma_ddx = np.vectorize(NeuralNetwork.dactivate)
+        
+        #last output has softmax applied, so it has to be handled differently going backwards
         output = self.outputs.pop()
         error = target - output
-        indicies = [i for i in reversed(range(len(self.weights)))]
+        gradient = error * (smaxed_output - output) * self.learningRate  ### BIG CHANGE HERE
+        self.bias[-1] += gradient
+        deltas = np.matmul(gradient, self.outputs[-1].transpose())
+        self.weights[-1] += deltas
+        
+        
+        output = self.outputs.pop()
+        error = np.matmul(self.weights[-1].transpose(), error)
+        indicies = [i for i in reversed(range(len(self.weights[:-1])))]
         for index in indicies:
             gradient = error * sigma_ddx(output) * self.learningRate
             self.bias[index] += gradient
